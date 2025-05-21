@@ -40,7 +40,7 @@ class LLMModelManager {
             case error(Error)
         }
 
-        let modelConfiguration = LLMRegistry.smolLM_135M_4bit
+        var modelConfiguration = LLMRegistry.smolLM_135M_4bit
         let generateParameters = GenerateParameters(
             temperature: 0.7,
             topP: 0.95,
@@ -49,6 +49,56 @@ class LLMModelManager {
         )
         let maxTokens = 240
         let displayEveryNTokens = 4
+        
+        // Function to set the model from the dropdown selection
+        func setModel(_ modelOption: LLMModelOption) {
+            // Reset the load state and clear old model data
+            loadState = .idle
+            
+            // Set the model configuration based on the selected option
+            switch modelOption {
+            case .codeLlama13b4bit:
+                modelConfiguration = LLMRegistry.codeLlama13b4bit
+            case .deepSeekR1_7B_4bit:
+                modelConfiguration = LLMRegistry.deepSeekR1_7B_4bit
+            case .gemma2bQuantized:
+                modelConfiguration = LLMRegistry.gemma2bQuantized
+            case .gemma_2_2b_it_4bit:
+                modelConfiguration = LLMRegistry.gemma_2_2b_it_4bit
+            case .gemma_2_9b_it_4bit:
+                modelConfiguration = LLMRegistry.gemma_2_9b_it_4bit
+            case .llama3_1_8B_4bit:
+                modelConfiguration = LLMRegistry.llama3_1_8B_4bit
+            case .llama3_2_1B_4bit:
+                modelConfiguration = LLMRegistry.llama3_2_1B_4bit
+            case .llama3_2_3B_4bit:
+                modelConfiguration = LLMRegistry.llama3_2_3B_4bit
+            case .llama3_8B_4bit:
+                modelConfiguration = LLMRegistry.llama3_8B_4bit
+            case .mistral7B4bit:
+                modelConfiguration = LLMRegistry.mistral7B4bit
+            case .mistralNeMo4bit:
+                modelConfiguration = LLMRegistry.mistralNeMo4bit
+            case .openelm270m4bit:
+                modelConfiguration = LLMRegistry.openelm270m4bit
+            case .phi3_5MoE:
+                modelConfiguration = LLMRegistry.phi3_5MoE
+            case .phi3_5_4bit:
+                modelConfiguration = LLMRegistry.phi3_5_4bit
+            case .phi4bit:
+                modelConfiguration = LLMRegistry.phi4bit
+            case .qwen205b4bit:
+                modelConfiguration = LLMRegistry.qwen205b4bit
+            case .qwen2_5_7b:
+                modelConfiguration = LLMRegistry.qwen2_5_7b
+            case .qwen2_5_1_5b:
+                modelConfiguration = LLMRegistry.qwen2_5_1_5b
+            case .smolLM_135M_4bit:
+                modelConfiguration = LLMRegistry.smolLM_135M_4bit
+            case .gemma3_1B_4bit:
+                modelConfiguration = LLMRegistry.gemma3_1B_4bit
+            }
+        }
 
         /// load and return the model -- can be called multiple times, subsequent calls will
         /// just return the loaded model

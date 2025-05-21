@@ -24,6 +24,7 @@ struct ContentView: View {
     @StateObject private var viewModel = LLMModelManager.LLMEvaluator()
     @State private var messageText: String = ""
     @State private var selectedDisplayStyle = DisplayStyle.markdown
+    @State private var selectedModel: LLMModelOption = .smolLM_135M_4bit
     @Namespace private var bottomID  // For auto-scrolling
 
     var body: some View {
@@ -36,10 +37,29 @@ struct ContentView: View {
                 
                 if case .error(let error) = viewModel.loadState {
                     Button(action: {
-                        Task { try? await viewModel.load() }
+                        Task {
+                            viewModel.setModel(selectedModel)
+                            try? await viewModel.load()
+                        }
                     }) {
                         Image(systemName: "arrow.clockwise.circle")
                             .foregroundColor(.blue)
+                    }
+                }
+                
+                Spacer()
+                
+                // Model selector dropdown
+                Picker("Model", selection: $selectedModel) {
+                    ForEach(LLMModelOption.allCases) { model in
+                        Text(model.displayName).tag(model)
+                    }
+                }
+                .pickerStyle(.menu)
+                .onChange(of: selectedModel) { newModel in
+                    Task {
+                        viewModel.setModel(newModel)
+                        try? await viewModel.load()
                     }
                 }
             }
